@@ -6,4 +6,8 @@ describe("foo", function() {
   it("fails", function() {
     expect("b").toBe("c");
   });
+
+  it("fails number", function() {
+    expect(1).toBe(3);
+  });
 });

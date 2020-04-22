@@ -9,14 +9,22 @@ class MyCustomReporter {
        if (item.status !== 'failed') {
             return;
         }
-        const name = 'some.test.js';
-        const line = 7;
-        const col = 17;
-        const message = item.failureMessages[0];
-        console.log('')
+        const newLine = '%0A';
+        const name = results.testResults[0].testFilePath;
+
+        if (!item.location) {
+          throw new Error('You need to invoked jest with argument --testLocationInResults')
+        }
+
+        const line = item.location.line + 1;
+        const col = item.location.column;
+        const message = item.failureMessages[0].replace(/\n/g, newLine);
+
         console.log(`::error file=${name},line=${line},col=${col}::${message}`)
       })
     }
   }
   
   module.exports = MyCustomReporter;
+
+  // see https://github.com/facebook/jest/pull/4782
