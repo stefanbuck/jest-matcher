@@ -5,18 +5,30 @@ class MyCustomReporter {
   }
 
   onRunComplete(contexts, results) {
-    results.testResults[0].testResults.forEach((item) => {
-      if (item.status !== "failed") {
-        return;
-      }
-      const newLine = "%0A";
-      const name = results.testResults[0].testFilePath;
+    results.testResults.forEach((testResultItem) => {
+      const testFilePath = testResultItem.testFilePath;
 
-      const message = item.failureMessages[0].replace(/\n/g, newLine);
-      const [, line, col] = item.failureMessages[0].match(/:([0-9]+):([0-9]+)/);
+      testResultItem.testResults.forEach((result) => {
+          if (result.status !== "failed") {
+            return;
+          }
+          
+          result.failureMessages.forEach(failureMessages => {
+            const newLine = "%0A";
+            const message = failureMessages.replace(/\n/g, newLine);
+            const captureGroup = message.match(/:([0-9]+):([0-9]+)/);
 
-      console.log(`::error file=${name},line=${line},col=${col}::${message}`);
-    });
+            if (!captureGroup) {
+              console.log('Unable to extract line number from call stack')
+              return;
+            }
+
+            const [, line, col] = captureGroup;
+            console.log(`::error file=${testFilePath},line=${line},col=${col}::${message}`);
+          })
+    
+        });
+    })
   }
 }
 
