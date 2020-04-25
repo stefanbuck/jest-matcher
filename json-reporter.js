@@ -12,15 +12,8 @@ class MyCustomReporter {
       const newLine = "%0A";
       const name = results.testResults[0].testFilePath;
 
-      if (!item.location) {
-        throw new Error(
-          "You need to invoked jest with argument --testLocationInResults"
-        );
-      }
-
-      const line = item.location.line + 1;
-      const col = item.location.column;
       const message = item.failureMessages[0].replace(/\n/g, newLine);
+      const [, line, col] = item.failureMessages[0].match(/:([0-9]+):([0-9]+)/);
 
       console.log(`::error file=${name},line=${line},col=${col}::${message}`);
     });

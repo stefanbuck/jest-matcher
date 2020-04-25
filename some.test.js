@@ -4,6 +4,7 @@ describe("foo", function() {
   });
   
   it("fails", function() {
-    expect("b").toBe("a");
+    expect("b").toBe("b");
+    expect("c").toBe("d");
   });
 });
