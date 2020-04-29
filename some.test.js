@@ -6,5 +6,10 @@ describe("foo", function() {
   it("fails", function() {
     expect("b").toBe("b");
     expect("c").toBe("d");
+    expect("d").toBe("c");
+  });
+ 
+  it("fails II", function() {
+    expect(1).toBe(2);
   });
 });
